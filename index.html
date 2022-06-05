@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@2.15.0/dist/full.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js"
+      integrity="sha512-sW/w8s4RWTdFFSduOTGtk4isV1+190E/GghVffMA9XczdJ2MDzSzLEubKAs5h0wzgSJOQTRYyaz73L3d6RtJSg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <title>Document</title>
+    <style>
+      h1 {
+        padding-top: 1em;
+      }
+    </style>
+  </head>
+
+  <body class="p-10">
+    <p id="timeValue">-</p>
+
+    <h1>現貨 BTC</h1>
+    <p id="spot" class="spot"></p>
+    <h1>合約 BTC</h1>
+    <p id="futures" class="futures"></p>
+
+    <h1>升帖水</h1>
+    <p id="result" class="diff"></p>
+
+    <canvas id="myChart" width="400" height="400"></canvas>
+
+    <script src="./index.js"></script>
+  </body>
+</html>
