@@ -4,10 +4,14 @@ var timeValue = document.getElementById("timeValue");
 var historyValue = document.getElementById("historyValue");
 var timeArrayValue = document.getElementById("timeArrayValue");
 var historyArray = [];
-var time = 0;
 var timeArray = [];
+var time = 0;
 var myChart;
+var btcChart;
 var chartConfig;
+var btcChartConfig;
+
+var btcPriceArray = [];
 
 loop();
 setupChart();
@@ -24,6 +28,8 @@ async function updateSpot() {
   var data = await api.json();
 
   spot.innerHTML = data.price;
+
+  btcPriceArray.push(data.price);
 }
 
 async function updateFutures() {
@@ -50,14 +56,15 @@ async function loop() {
   timeArrayValue.innerHTML = timeArray.join(", ");
 
   updateChart();
-  myChart.update({
-    duration: 800,
-    easing: "easeOutBounce",
-  });
+  updateBtcChart();
+  myChart.update();
 
-  if (timeArray.length > 15) {
+  btcChart.update();
+
+  if (timeArray.length > 35) {
     timeArray.shift();
     historyArray.shift();
+    btcPriceArray.shift();
   }
 
   setTimeout(loop, 1000);
@@ -89,7 +96,7 @@ async function updateChart() {
     labels: labels,
     datasets: [
       {
-        label: "歷史",
+        label: "升帖水",
         data: historyArray,
         fill: false,
         borderColor: "rgb(75, 192, 192)",
@@ -99,6 +106,28 @@ async function updateChart() {
   };
 
   chartConfig = {
+    type: "line",
+    data: data,
+    options: {},
+  };
+}
+
+async function updateBtcChart() {
+  const labels = timeArray;
+  const data = {
+    labels: labels,
+    datasets: [
+      {
+        label: "BTC",
+        data: btcPriceArray,
+        fill: false,
+        borderColor: "rgb(75, 192, 192)",
+        tension: 0.1,
+      },
+    ],
+  };
+
+  btcChartConfig = {
     type: "line",
     data: data,
     options: {},
@@ -126,5 +155,24 @@ async function setupChart() {
     options: {},
   };
 
+  btcChartConfig = {
+    type: "line",
+    data: {
+      labels: timeArray,
+      datasets: [
+        {
+          label: "BTC",
+          data: btcPriceArray,
+          fill: false,
+          borderColor: "rgb(75, 192, 192)",
+          tension: 0.1,
+        },
+      ],
+    },
+    options: {},
+  };
+
   myChart = new Chart(document.getElementById("myChart"), chartConfig);
+
+  btcChart = new Chart(document.getElementById("btcChart"), btcChartConfig);
 }
