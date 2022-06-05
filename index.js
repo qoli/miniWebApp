@@ -1,9 +1,16 @@
 var spot = document.getElementById("spot");
 var futures = document.getElementById("futures");
 var timeValue = document.getElementById("timeValue");
+var historyValue = document.getElementById("historyValue");
+var timeArrayValue = document.getElementById("timeArrayValue");
+var historyArray = [];
 var time = 0;
+var timeArray = [];
+var myChart;
+var chartConfig;
 
 loop();
+setupChart();
 
 async function updateSpot() {
   var api = await fetch(
@@ -39,6 +46,20 @@ async function loop() {
   await calc();
   time = time + 1;
   timeValue.innerHTML = time;
+  timeArray.push(time);
+  timeArrayValue.innerHTML = timeArray.join(", ");
+
+  updateChart();
+  myChart.update({
+    duration: 800,
+    easing: "easeOutBounce",
+  });
+
+  if (timeArray.length > 15) {
+    timeArray.shift();
+    historyArray.shift();
+  }
+
   setTimeout(loop, 1000);
 }
 
@@ -57,4 +78,53 @@ async function calc() {
   }
 
   document.getElementById("result").innerHTML = returnData;
+
+  historyArray.push(diff.toFixed(2));
+  historyValue.innerHTML = historyArray.join(", ");
+}
+
+async function updateChart() {
+  const labels = timeArray;
+  const data = {
+    labels: labels,
+    datasets: [
+      {
+        label: "歷史",
+        data: historyArray,
+        fill: false,
+        borderColor: "rgb(75, 192, 192)",
+        tension: 0.1,
+      },
+    ],
+  };
+
+  chartConfig = {
+    type: "line",
+    data: data,
+    options: {},
+  };
+}
+
+async function setupChart() {
+  const labels = timeArray;
+  const data = {
+    labels: labels,
+    datasets: [
+      {
+        label: "歷史",
+        data: historyArray,
+        fill: false,
+        borderColor: "rgb(75, 192, 192)",
+        tension: 0.1,
+      },
+    ],
+  };
+
+  chartConfig = {
+    type: "line",
+    data: data,
+    options: {},
+  };
+
+  myChart = new Chart(document.getElementById("myChart"), chartConfig);
 }
