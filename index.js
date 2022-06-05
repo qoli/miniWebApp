@@ -51,6 +51,10 @@ async function loop() {
   await updateFutures();
   await calc();
   time = time + 1;
+  if (time > 60) {
+    time = 1;
+  }
+
   timeValue.setAttribute("style", "--value: " + time + "");
   timeArray.push(time);
   timeArrayValue.innerHTML = timeArray.join(", ");
@@ -61,7 +65,7 @@ async function loop() {
 
   btcChart.update();
 
-  if (timeArray.length > 35) {
+  if (timeArray.length > 60) {
     timeArray.shift();
     historyArray.shift();
     btcPriceArray.shift();
@@ -140,7 +144,7 @@ async function setupChart() {
     labels: labels,
     datasets: [
       {
-        label: "歷史",
+        label: "升帖水",
         data: historyArray,
         fill: false,
         borderColor: "rgb(75, 192, 192)",
@@ -164,7 +168,7 @@ async function setupChart() {
           label: "BTC",
           data: btcPriceArray,
           fill: false,
-          borderColor: "rgb(75, 192, 192)",
+          borderColor: "rgb(124, 179, 252)",
           tension: 0.1,
         },
       ],
