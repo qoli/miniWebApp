@@ -51,7 +51,7 @@ async function loop() {
   await updateFutures();
   await calc();
   time = time + 1;
-  timeValue.innerHTML = time;
+  timeValue.setAttribute("style", "--value: " + time + "");
   timeArray.push(time);
   timeArrayValue.innerHTML = timeArray.join(", ");
 
